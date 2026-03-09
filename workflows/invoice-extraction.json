@@ -94,7 +94,7 @@
         "messages": {
           "values": [
             {
-              "content": "=You are an invoice data extraction expert. Extract the following fields from this invoice text. Return ONLY valid JSON with these exact keys:\n\n- invoice_number: The invoice/receipt number\n- invoice_date: The date of the invoice (format: YYYY-MM-DD)\n- total_amount: The total/grand total amount (number only, no currency symbol)\n- tax_amount: The tax/VAT amount (number only, no currency symbol, use 0 if not found)\n- currency: The currency code (e.g. EUR, USD, GBP)\n- vendor_name: The name of the vendor/company issuing the invoice\n\nInvoice text:\n{{ $json.data }}",
+              "content": "=You are an expert at extracting data from German payment settlement invoices (Abrechnungen). Extract the following fields from this invoice text. Return ONLY valid JSON with these exact keys:\n\n- rechnungsnummer: The Rechnungsausgleich number (e.g. 333539812)\n- datum: The date from 'Ausstehende Onlinebezahlungen am ...' (format: YYYY-MM-DD)\n- ausstehende_onlinebezahlungen: The outstanding online payments amount (decimal number using dot as separator, e.g. 1209.75)\n- rechnungsausgleich: The invoice settlement amount (decimal number using dot, e.g. 112.31)\n- auszahlung: The payout amount (decimal number using dot, e.g. 1097.44)\n- iban: The IBAN bank account number (e.g. DE91100900002801119002)\n- empfaenger: The recipient company name (e.g. Yoko Sushi GmbH)\n- currency: The currency code (EUR, USD, etc.)\n\nIMPORTANT: German numbers use comma as decimal separator (1.209,75 means 1209.75). Convert ALL amounts to use dot as decimal separator in your output.\n\nInvoice text:\n{{ $json.data }}",
               "role": "user"
             }
           ]
@@ -121,7 +121,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const response = $input.first().json.message.content;\nconst data = JSON.parse(response);\n\nreturn [{\n  json: {\n    invoice_number: data.invoice_number || '',\n    invoice_date: data.invoice_date || '',\n    total_amount: data.total_amount || 0,\n    tax_amount: data.tax_amount || 0,\n    currency: data.currency || '',\n    vendor_name: data.vendor_name || '',\n    email_subject: $('Gmail Trigger').first().json.subject || '',\n    email_from: $('Gmail Trigger').first().json.from?.value?.[0]?.address || '',\n    processed_at: new Date().toISOString()\n  }\n}];"
+        "jsCode": "const response = $input.first().json.message.content;\nconst data = JSON.parse(response);\n\nreturn [{\n  json: {\n    rechnungsnummer: data.rechnungsnummer || '',\n    datum: data.datum || '',\n    ausstehende_onlinebezahlungen: data.ausstehende_onlinebezahlungen || 0,\n    rechnungsausgleich: data.rechnungsausgleich || 0,\n    auszahlung: data.auszahlung || 0,\n    iban: data.iban || '',\n    empfaenger: data.empfaenger || '',\n    currency: data.currency || 'EUR',\n    email_subject: $('Gmail Trigger').first().json.subject || '',\n    email_from: $('Gmail Trigger').first().json.from?.value?.[0]?.address || '',\n    processed_at: new Date().toISOString()\n  }\n}];"
       },
       "id": "parse-response",
       "name": "Parse AI Response",

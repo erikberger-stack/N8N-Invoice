@@ -8,7 +8,7 @@ Gmail Trigger → Has Attachments? → Extract PDF Text → OpenAI Extract Data 
 
 **What it does**: Monitors Gmail for new emails with PDF invoices, extracts key data using GPT-4o, and appends it to a Google Sheet.
 
-**Extracted fields**: Invoice Number, Date, Total Amount, Tax Amount, Currency, Vendor Name, Email Subject, Sender, Processed Timestamp.
+**Extracted fields**: Rechnungsnummer, Datum, Ausstehende Onlinebezahlungen, Rechnungsausgleich, Auszahlung, IBAN, Empfänger, Currency, Email Subject, Sender, Processed Timestamp.
 
 ---
 
@@ -48,8 +48,8 @@ After importing, you need to set up 3 credentials:
 
 Create a Google Sheet with these column headers in row 1:
 
-| invoice_number | invoice_date | total_amount | tax_amount | currency | vendor_name | email_subject | email_from | processed_at |
-|---|---|---|---|---|---|---|---|---|
+| rechnungsnummer | datum | ausstehende_onlinebezahlungen | rechnungsausgleich | auszahlung | iban | empfaenger | currency | email_subject | email_from | processed_at |
+|---|---|---|---|---|---|---|---|---|---|---|
 
 ---
 
